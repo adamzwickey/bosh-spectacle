@@ -1,0 +1,36 @@
+<DOCTYPE html>
+    <html lang="en">
+        <head>
+            <title>BOSH Spectacle</title>
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+            <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+            <link href="style.css" rel="stylesheet"/>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.js"></script>
+        </head>
+        <body>
+            <div class="container page-header">
+                <h1>BOSH Spectacle</h1>
+            </div>
+            <div class="container">
+                <div class="panel-body well">
+                    <span id='tree'></span>
+                </div>
+                <div id="details" class="panel panel-primary hidden">
+                    <div class="panel-heading">
+                        <h3 id="details-title" class="panel-title hidden">Panel title</h3>
+                    </div>
+                    <!--Templatized Snippets for Each of the types -->
+                    <!-- Job -->
+                    <div id="job-details" class="panel-body hidden"></div>
+                    <!-- Errand -->
+                    <div id="errand-details" class="panel-body hidden"></div>
+                    <!-- Releases -->
+                    <div id="release-details" class="panel-body hidden"></div>
+                    <!-- Stemcells -->
+                    <div id="stemcell-details" class="panel-body hidden"></div>
+                </div>
+            </div>
+            <script src='app.js'></script>
+        </body>
+    </html>

@@ -1,0 +1,18 @@
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+
+logging:
+  level:
+    io.pivotal.demo.bosh: DEBUG
+
+bosh:
+  director: https://10.193.53.31:25555/
+  oauth:
+    clientID: xxxx
+    clientSecret: xxxx
+    accessTokenUri: https://10.193.53.31:8443/oauth/token

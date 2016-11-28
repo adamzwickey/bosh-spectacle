@@ -1,0 +1,190 @@
+svg {
+    border-radius:3px;
+}
+.node {
+    cursor: pointer;
+}
+
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+}
+
+.node text {
+    font: 12px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #99ccff;
+    stroke-width: 2px;
+}
+
+.hyper {
+    color: red;
+    text-decoration: underline;
+}
+
+.hyper:hover {
+    color:yellow;
+    text-decoration: none;
+}
+.selected {
+    font-weight:bold;
+}
+.not-selected {
+    font-weight:normal;
+}
+
+
+body {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    margin: 0 auto 4em auto;
+    tab-size: 2;
+    -webkit-text-size-adjust: none;
+}
+
+header {
+    color: #999;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 1.5em 0;
+}
+
+.column {
+    max-width: 960px;
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+h1 {
+    font-size: 46px;
+    font-weight: 500;
+    letter-spacing: -1px;
+    margin: 0.1em 0;
+}
+
+h2 {
+    margin-top: 2em;
+}
+
+h1, h2 {
+    text-rendering: optimizeLegibility;
+}
+
+.avatar {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    border-radius: 4px;
+}
+
+blockquote {
+    max-width: 640px;
+}
+
+li {
+    max-width: 680px;
+}
+
+a:link {
+    color: #3182bd;
+    fill: #3182bd;
+}
+
+a:visited {
+    color: #756bb1;
+    fill: #756bb1;
+}
+
+a.self {
+    color: #000;
+}
+
+a.anchor {
+    color: #ccc;
+    left: -40px;
+    padding: 0 10px;
+    margin: 0 10px;
+    position: absolute;
+    font-weight: normal;
+}
+
+a:not(:hover) {
+    text-decoration: none;
+}
+
+textarea {
+    font-size: 100%;
+}
+
+pre {
+    border-left: solid 2px #ccc;
+    padding-left: 18px;
+    margin: 2em 0 2em -20px;
+    max-width: 960px;
+    overflow-x: auto;
+}
+
+.html .value,
+.javascript .string,
+.javascript .regexp {
+    color: #756bb1;
+}
+
+.html .tag,
+.css .tag,
+.javascript .keyword {
+    color: #3182bd;
+}
+
+aside,
+.comment {
+    color: #636363;
+}
+
+.html .doctype,
+.javascript .number {
+    color: #31a354;
+}
+
+.html .attribute,
+.css .attribute,
+.javascript .class,
+.javascript .special {
+    color: #e6550d;
+}
+
+h1,
+iframe {
+    width: 960px;
+}
+
+.loading {
+    clear: both;
+    color: #aaa;
+}
+
+.index-pop {
+    position: absolute;
+    right: 10px;
+    margin-top: 1em;
+    line-height: 1.5em;
+}
+
+.index-pop svg {
+    text-decoration: none !important;
+    margin-left: 0.3em;
+    position: relative;
+    top: 3px;
+}
+
+.date {
+    font-size: 11px;
+}
+
+
