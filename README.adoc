@@ -16,7 +16,7 @@ $ mvn clean build
 
 . Update the following 3 properties in your cloudfoundry manifest.yml file
 +
-[source, yaml, numbered]
+[source, yaml]
 ---------------------------------------------------------------------
   env:
     bosh.director.clientId: xxxx
