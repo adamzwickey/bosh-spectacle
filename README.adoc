@@ -1,0 +1,31 @@
+= BOSH Specatacle
+
+A read-only view in BOSH Director
+
+
+
+== Deploying
+
+. Clean and build the project with Maven
++
+[source,bash]
+---------------------------------------------------------------------
+$ mvn clean build
+---------------------------------------------------------------------
+
+. Update the following 3 properties in your cloudfoundry manifest.yml file
++
+[source, yaml, numbered]
+---------------------------------------------------------------------
+  env:
+    bosh.director.clientId: xxxx
+    bosh.director.ip: xxxx
+    bosh.director.secret: xxxx
+---------------------------------------------------------------------
+
+. Push the application to cloudfoundry
++
+[source,bash]
+---------------------------------------------------------------------
+$ cf push
+---------------------------------------------------------------------

@@ -11,8 +11,8 @@ logging:
     io.pivotal.demo.bosh: DEBUG
 
 bosh:
-  director: https://10.193.53.31:25555/
+  director: https://${bosh.director.ip:127.0.0.1}:25555/
   oauth:
-    clientID: xxxx
-    clientSecret: xxxx
-    accessTokenUri: https://10.193.53.31:8443/oauth/token
+    clientID: ${bosh.director.clientId:admin}
+    clientSecret: ${bosh.director.secret:xxxxx}
+    accessTokenUri: https://${bosh.director.ip:127.0.0.1}:8443/oauth/token
