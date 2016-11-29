@@ -1,7 +1,6 @@
 = BOSH Spectacle
 
 A read-only view in BOSH Director
-+
 image::screenshot.png[]
 
 
