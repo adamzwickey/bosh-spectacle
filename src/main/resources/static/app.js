@@ -206,7 +206,15 @@ function update(source) {
                         $("#job-details").empty();
 
 
+
+
                         $("#details-title").append("Job Details [" + d.name + "]");
+                        if(d.data.ssh_url) {
+                            $("#details-title").append(" <a href='" + d.data.ssh_url + "' target='_blank'><img src='ssh.png' width='50' height='50'/></a>");
+                            width=""
+                            height=""
+                        }
+
                         var html = "<div class='row'>";
 
                         html += "<div class='col-md-6'><b>ID:</b> " + d.data.id + "<br>" +

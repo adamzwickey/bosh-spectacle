@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +28,17 @@ public class BoshController {
     @Autowired
     private RestTemplate _oauth2template;
 
-    @Value("${bosh.director:https://localhost:25555/}")
+    @Value("${bosh.director}")
     private String _boshUrl;
+
+    @Value("${bosh.ssh.enabled}")
+    private boolean _sshEnabled;
+
+    @Value("${bosh.ssh.gcp.project:project}")
+    private String _gcpProject;
+
+    private final static MessageFormat GCP_SSH_URL = new MessageFormat("https://ssh.cloud.google.com/projects/{0}/zones/us-east1-b/instances/{1}?authuser=1");
+
 
     private HttpEntity<String> buildEntity() {
         HttpHeaders headers = new HttpHeaders();
@@ -90,8 +100,14 @@ public class BoshController {
 
         response = _oauth2template.exchange(_boshUrl + location + "/output?type=result",
                 HttpMethod.GET, buildEntity(), String.class);
-        LOG.debug("Instances Response: " + response);
-        return mergeJsons(response.getBody().toString());
+
+        List<Map> jsons = mergeJsons(response.getBody().toString());
+        for(Map m : jsons) {
+            //add ssh key if needed
+            if(_sshEnabled) addSSH(m);
+            LOG.debug("Instances Response Json: " + m);
+        }
+        return jsons;
     }
 
     @RequestMapping(value="/deployment/{name}/vms", produces="application/json")
@@ -133,5 +149,13 @@ public class BoshController {
             jsons.add(mapper.readValue(lines[i], Map.class));
         }
         return jsons;
+    }
+
+    protected void addSSH(Map m) {
+        String vm = (String) m.get("vm_cid");
+        if(vm != null) {
+            Object[] vars = {_gcpProject, vm};
+            m.put("ssh_url", GCP_SSH_URL.format(vars));
+        }
     }
 }
