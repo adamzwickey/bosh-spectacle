@@ -3,7 +3,8 @@ BOSH Spectacle
 =============
 
 A read-only view in BOSH Director
-![](https://github.com/azwickey-pivotal/bosh-spectacle/blob/master/screenshot.png)
+
+<kbd>![alt-text](https://github.com/azwickey-pivotal/bosh-spectacle/blob/master/screenshot.png)</kbd>
 
 ### Deploying
 
