@@ -39,11 +39,100 @@ $.ajax({
             ]
 
         };
+
+
+        console.log("preloading VM info for: " + value.name);
+        $.ajax({
+            url: "/bosh/deployment/" + value.name + "/instances",
+        }).then(function(data) {
+
+            //loop through each job and keep track of things
+            var deploymentDetails = [];
+            var jobMap = new Map();
+            $.each(data, function(key, value) {
+                if(value.job_state == null) {
+                    var errands = jobMap.get("Errands");
+                    if(!errands) {
+                        errands = {
+                            name: "Errands",
+                            type: "errand",
+                            _children: []
+                        };
+                    }
+
+                    var model = {
+                        name: value.job_name,
+                        type: "errand",
+                        data: value
+                    };
+                    errands._children.push(model);
+                    jobMap.set("Errands",errands);
+
+                 } else if(jobMap.has(value.job_name)) {
+                    var jobs = jobMap.get(value.job_name);
+                    var model = {
+                        name: value.job_name + "/" + value.index,
+                        type: "job",
+                        status: "ok",
+                        data: value
+                    };
+
+                    //set status on both
+                    $.each(value.processes, function(key, value) {
+                        if(value.state != "running") {
+                            model.status = "failing";
+                            jobs.status = "failing";
+                        }
+                    });
+
+                    jobs._children.push(model);
+                    jobMap.set(value.job_name,jobs);
+
+                } else {
+                    var jobs = {
+                        name: value.job_name,
+                        type: "job-pool",
+                        status: "ok",
+                        _children: []
+                    };
+
+                    var model = {
+                        name: value.job_name + "/" + value.index,
+                        type: "job",
+                        status: "ok",
+                        data: value
+                    };
+
+                    //set status on both
+                    $.each(value.processes, function(key, value) {
+                        if(value.state != "running") {
+                            model.status = "failing";
+                            jobs.status = "failing";
+                        }
+                    });
+
+
+                    jobs._children.push(model);
+                    jobMap.set(value.job_name,jobs);
+                }
+            });
+
+            jobMap.forEach(function(value, key) { deploymentDetails.push(value);  });
+
+            deployment._children[0]._children = deploymentDetails;
+            console.log("Done preloading " + value.name);
+        });
+
         treeData[0].children.push(deployment);
     });
     //pop off first one when we are done since this was placeholder
     treeData[0].children.shift();
-    update(root);
+
+    $( document ).ajaxStop(function() {
+        //$( "#loading" ).hide();
+        console.log("all ajax should be done");
+        update(root);
+    });
 });
 
 
@@ -80,72 +169,6 @@ d3.select(self.frameElement).style("height", "800px");
 function update(source) {
     console.log(source);
 
-    //preload details if this is a deployment
-    if(source.type == "deployment" && source.children[0]._children == null) {
-
-        console.log("preloading VM info...");
-        $.ajax({
-            url: "/bosh/deployment/" + source.name + "/instances",
-        }).then(function(data) {
-
-            //loop through each job and keep track of things
-            var deployment = [];
-            var jobMap = new Map();
-            $.each(data, function(key, value) {
-
-                if(value.job_state == null) {
-                    var errands = jobMap.get("Errands");
-                    if(!errands) {
-                        errands = {
-                            name: "Errands",
-                            type: "errand",
-                            _children: []
-                        };
-                    }
-
-                    var model = {
-                        name: value.job_name,
-                        type: "errand",
-                        data: value
-                    };
-                    errands._children.push(model);
-                    jobMap.set("Errands",errands);
-
-                } else if(jobMap.has(value.job_name)) {
-                    var jobs = jobMap.get(value.job_name);
-                    var model = {
-                        name: value.job_name + "/" + value.index,
-                        type: "job",
-                        data: value
-                    };
-                    jobs._children.push(model);
-                    jobMap.set(value.job_name,jobs);
-
-                } else {
-                    var jobs = {
-                        name: value.job_name,
-                        type: "job-pool",
-                        _children: []
-                     };
-
-                    var model = {
-                        name: value.job_name + "/" + value.index,
-                        type: "job",
-                        data: value
-                    };
-                    jobs._children.push(model);
-                    jobMap.set(value.job_name,jobs);
-                }
-            });
-
-            jobMap.forEach(function(value, key) { deployment.push(value);  });
-
-            source.children[0]._children = deployment;
-            console.log("Done preloading...");
-            update(source);
-        });
-    }
-
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
         links = tree.links(nodes);
@@ -167,8 +190,12 @@ function update(source) {
     nodeEnter.append("image")
         .attr("xlink:href", function(d) {
             var img = "bubble.png";
-            if(d.type == "job") {
-                img = (d.data.job_state == "running") ? "sun.png" : "cloud.png";
+            if(d.type == "job" || d.type == "job-pool") {
+                img = (d.status == "ok") ? "sun.png" : "cloud.png";
+            }
+            //handle top level deployment a bit differently
+            if(d.type == "vm-group" && d.status) {
+                img = (d.status == "ok") ? "sun.png" : "cloud.png";
             }
             return img;
         })
@@ -313,8 +340,12 @@ function update(source) {
     nodeUpdate.select("image")
         .attr("xlink:href", function(d) {
             var img = "bubble.png";
-            if(d.type == "job") {
-                img = (d.data.job_state == "running") ? "sun.png" : "cloud.png";
+            if(d.type == "job" || d.type == "job-pool") {
+                img = (d.status == "ok") ? "sun.png" : "cloud.png";
+            }
+            //handle top level deployment a bit differently
+            if(d.type == "vm-group" && d.status) {
+                img = (d.status == "ok") ? "sun.png" : "cloud.png";
             }
             return img;
         })
