@@ -5,20 +5,25 @@ security:
 management:
   security:
     enabled: false
+  info:
+    git:
+      mode: full
+  cloudfoundry:
+    enabled: true
+    skip-ssl-validation: true
 
 logging:
   level:
     io.pivotal.demo.bosh: DEBUG
 
 bosh:
-  director: https://${bosh.director.ip:127.0.0.1}:25555/
+  director: https://${bosh.director.ip:10.193.53.30}:25555/
   oauth:
     clientID: ${bosh.director.clientId:ops_manager}
-    clientSecret: ${bosh.director.secret:super-secret-string}
-    accessTokenUri: https://${bosh.director.ip:127.0.0.1}:8443/oauth/token
+    clientSecret: ${bosh.director.secret:IHcjTmCAMnQn50vcUokRuyf-rVV4sCFB}
+    accessTokenUri: https://${bosh.director.ip:10.193.53.30}:8443/oauth/token
   ssh:
     enabled: true
     cpi: gcp
     gcp:
       project: fe-azwickey
-
